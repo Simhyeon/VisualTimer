@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Visual Timer</string>
+    <string name="license_title">라이선스</string>
+    <string name="waveTimer">물결 타이머</string>
+    <string name="runningTimer">말 타이머</string>
+    <string name="sectorTimer">부채꼴 타이머</string>
+    <string name="ringTimer">고리 타이머</string>
+</resources>

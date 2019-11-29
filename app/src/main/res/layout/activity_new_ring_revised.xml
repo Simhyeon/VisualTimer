@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ringRootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <com.timqi.sectorprogressview.ColorfulRingProgressView
+        android:id="@+id/ring"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_centerInParent="true"
+        app:bgColor="@color/colorBackground"
+        app:fgColorEnd="@color/colorYellow"
+        app:fgColorStart="@color/colorYellow"
+        app:percent="100"
+        app:startAngle="0"
+        app:strokeWidth="20dp"   >
+
+    </com.timqi.sectorprogressview.ColorfulRingProgressView>
+
+    <TextView
+        android:id="@+id/ringTimerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="45sp"
+        android:textColor="@color/colorYellow"
+        android:text="00:00:00" />
+
+</RelativeLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1E2538</color>
+    <color name="colorPrimaryDark">#0E121B</color>
+    <color name="colorAccent">#33b5e5</color> <!-- Android Holo dark  -->
+    <color name="colorAccentPink">#E040FB</color>
+    <color name="colorAccentLightPink">#E1BEE7</color>
+    <color name="colorBackground">#151B29</color>
+    <color name="colorYellow">#F5FA55</color>
+    <color name="colorGray">#858585</color>
+    <color name="colorEigengrau">#16161d</color>
+    <color name="colorPurple">#9300FF</color>
+    <!--Running Timer neon color-->
+    <color name="neonGreen">#39FF14</color>
+    <color name="neonRed">#ff073a</color>
+    <color name="neonYello">#faed27</color>
+</resources>

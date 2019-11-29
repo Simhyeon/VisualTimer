@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:background="#80bebebe">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:textColor="@color/colorBackground"
+        android:textSize="25sp"
+        android:text="타이머 설정"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <RadioGroup
+        android:layout_gravity="center"
+        android:id="@+id/timerTypeRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/radio1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/waveTimer"
+            app:buttonTint="@android:color/holo_blue_dark"/>
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/radio2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/runningTimer"
+            app:buttonTint="@android:color/holo_blue_dark"/>
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/radio3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sectorTimer"
+            app:buttonTint="@android:color/holo_blue_dark"/>
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/radio4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ringTimer"
+            app:buttonTint="@android:color/holo_blue_dark"/>
+
+    </RadioGroup>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp">
+
+    </ImageView>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:layout_gravity="center"
+        android:id="@+id/useDirectTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="직접 시간 설정하기"
+        android:layout_marginTop="15dp"
+        app:buttonTint="@android:color/holo_blue_dark"/>
+
+    <LinearLayout
+        android:id="@+id/timerTimeSetter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:enabled="false">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTimerHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="2"
+            android:hint="00"
+            android:inputType="numberSigned"
+            android:textCursorDrawable="@null"
+            app:backgroundTint="@android:color/holo_blue_dark"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"/>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTimerMinute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="2"
+            android:hint="00"
+            android:inputType="numberSigned"
+            android:textCursorDrawable="@null"
+            app:backgroundTint="@android:color/holo_blue_dark"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":"/>
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editTimerSecond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="2"
+            android:hint="00"
+            android:inputType="numberSigned"
+            android:textCursorDrawable="@null"
+            app:backgroundTint="@android:color/holo_blue_dark"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="확인"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:background="#80bebebe"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="취소"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:background="#80bebebe"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+</LinearLayout>

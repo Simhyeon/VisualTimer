@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:theme="@style/Theme.AppCompat">
+
+
+    <!--This fab is for initial screen-->
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/mainFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:menu_icon="@drawable/ic_setting"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        tools:ignore="VectorDrawableCompat" >
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_extra_license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_credit_temp"
+            app:fab_size="mini"
+            app:fab_label="기타 라이선스" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_maven_oss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_credit_temp"
+            app:fab_size="mini"
+            app:fab_label="메이븐 OSS 라이선스" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_item_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_view_list"
+            app:fab_size="mini"
+            app:fab_label="프리셋 설정" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_item_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_timer"
+            app:fab_size="mini"
+            app:fab_label="타이머 설정" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <!--This fab is for timer screen-->
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/screenFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:menu_icon="@drawable/ic_setting"
+        app:menu_colorNormal="#36D5DA"
+        app:menu_colorPressed="#43E7A5"
+        android:enabled="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        tools:ignore="VectorDrawableCompat" >
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_over_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_next"
+            android:enabled="false"
+            app:fab_size="mini"
+            app:fab_colorNormal="#36D5DA"
+            app:fab_colorPressed="#43E7A5"
+            app:fab_label="타이머 계속하기" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_restart_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_restart"
+            app:fab_size="mini"
+            app:fab_colorNormal="#36D5DA"
+            app:fab_colorPressed="#43E7A5"
+            app:fab_label="타이머 재시작" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_save_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save"
+            app:fab_size="mini"
+            app:fab_colorNormal="#36D5DA"
+            app:fab_colorPressed="#43E7A5"
+            app:fab_label="결과 저장" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_end_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_return"
+            app:fab_size="mini"
+            app:fab_colorNormal="#36D5DA"
+            app:fab_colorPressed="#43E7A5"
+            app:fab_label="타이머 종료" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+    <FrameLayout
+        android:id="@+id/fragmentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/presetText"
+        android:text="HELLO"
+        android:textSize="70sp"
+        android:textColor="@color/colorYellow"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</FrameLayout>
