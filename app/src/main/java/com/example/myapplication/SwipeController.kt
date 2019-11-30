@@ -57,7 +57,7 @@ class SwipeController(private val buttonsActions: SwipeControllerActions?) : Cal
         recyclerView.setOnTouchListener { _, event ->
             swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
             if (swipeBack) {
-                if (dX < -buttonWidth * 0.5f) buttonShowedState = ButtonsState.RIGHT_VISIBLE else if (dX > buttonWidth * 0.5f) buttonShowedState = ButtonsState.LEFT_VISIBLE
+                if (dX < -buttonWidth * 0.3f) buttonShowedState = ButtonsState.RIGHT_VISIBLE else if (dX > buttonWidth * 0.3f) buttonShowedState = ButtonsState.LEFT_VISIBLE
                 if (buttonShowedState != ButtonsState.GONE) {
                     setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     setItemsClickable(recyclerView, false)
@@ -127,7 +127,7 @@ class SwipeController(private val buttonsActions: SwipeControllerActions?) : Cal
     }
 
     private fun drawText(text: String, c: Canvas, button: RectF, p: Paint) {
-        val textSize = 20f
+        val textSize = 50f
         p.color = Color.WHITE
         p.isAntiAlias = true
         p.textSize = textSize
@@ -142,7 +142,7 @@ class SwipeController(private val buttonsActions: SwipeControllerActions?) : Cal
     }
 
     companion object {
-        private const val buttonWidth = 100f
+        private const val buttonWidth = 200f
     }
 }
 

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    android:theme="@style/Theme.AppCompat">
+    android:theme="@style/Theme.AppCompat"
+    android:orientation="vertical">
 
 
     <!--This fab is for initial screen-->
@@ -120,10 +121,10 @@
     <TextView
         android:id="@+id/presetText"
         android:text="HELLO"
-        android:textSize="70sp"
+        android:textSize="50dp"
         android:textColor="@color/colorYellow"
         android:layout_gravity="top|center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

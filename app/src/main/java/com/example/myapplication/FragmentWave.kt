@@ -29,7 +29,7 @@ class FragmentWave: androidx.fragment.app.Fragment(),  TimerController {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        waveTimerView = WaveTimerView(myContext!!, waveRootView, waveView, waveTimerText,33, DynamicActivity.currentPreset.name.toString() ,DynamicActivity.currentPreset.givenTime)
+        waveTimerView = WaveTimerView(myContext!!, waveRootView, waveView,33, DynamicActivity.currentPreset.name.toString() ,DynamicActivity.currentPreset.givenTime)
         waveTimerView!!.setWaveDrawable(R.drawable.gradient_sulphur, Color.argb(255,21,27,41), PorterDuff.Mode.SRC_ATOP)
 
         waveView.setOnClickListener {

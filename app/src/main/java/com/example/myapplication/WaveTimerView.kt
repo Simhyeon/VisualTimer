@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import kotlin.math.abs
 import kotlin.math.log
 
-class WaveTimerView(val context: Context, val rootView: View, val imageView: ImageView, val timerView: TextView, val delayMilliSeconds: Int, var presetName: String, var givenSeconds: Int) : TimerResult {
+class WaveTimerView(val context: Context, val rootView: View, val imageView: ImageView, val delayMilliSeconds: Int, var presetName: String, var givenSeconds: Int) : TimerResult {
 
     var waveDrawable: CorocWaveDrawable? = null
         private set
@@ -170,6 +170,7 @@ class WaveTimerView(val context: Context, val rootView: View, val imageView: Ima
 
     override fun saveResult() {
         if (presetName == ""){
+            Toast.makeText(context, "프리셋을 설정해주세요", Toast.LENGTH_SHORT).show()
             return
         }
         StatManager.update(Result(presetName, useOverTime, givenSeconds, milliTimePassed / 1000))

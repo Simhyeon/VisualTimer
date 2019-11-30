@@ -10,8 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ActivityStatistics"
-            android:label="프리셋 설정"/>
-        <activity android:name=".DynamicActivity">
+            android:label="프리셋 설정"
+            android:screenOrientation="portrait" />
+        <activity android:name=".DynamicActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

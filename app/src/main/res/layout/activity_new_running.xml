@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/runningRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/runningImage"
@@ -20,7 +22,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="300dp"
+        android:layout_marginBottom="250dp"
         android:tint="@color/colorYellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,14 +36,13 @@
         android:id="@+id/timerText"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="150dp"
         android:fontFamily="@font/alarmclock"
-        android:text="00:00"
+        android:text="00:00:00"
         android:textAlignment="center"
         android:textColor="@color/colorYellow"
-        android:textSize="80sp"
+        android:textSize="60dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

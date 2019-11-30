@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sectorRootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
 
     <com.example.myapplication.SectorProgressViewAnti
@@ -14,8 +17,12 @@
         android:layout_centerInParent="true"
         app:bgColor="@color/colorBackground"
         app:fgColor="@color/colorYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:percent="0"
-        app:startAngle="0"/>
+        app:startAngle="0" />
 
     <com.timqi.sectorprogressview.ColorfulRingProgressView
         android:id="@+id/background"
@@ -24,12 +31,15 @@
         android:layout_centerInParent="true"
         app:fgColorEnd="@color/colorYellow"
         app:fgColorStart="@color/colorYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:percent="100"
         app:startAngle="0"
-        app:strokeWidth="5dp"   >
+        app:strokeWidth="5dp">
 
     </com.timqi.sectorprogressview.ColorfulRingProgressView>
-
 
     <TextView
         android:id="@+id/sectorTimerText"
@@ -37,9 +47,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="180dp"
-        android:textSize="50sp"
+        android:layout_marginStart="117dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="145dp"
+        android:text="00:00:00"
         android:textColor="@color/colorYellow"
-        android:text="00:00:00" />
+        android:textSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

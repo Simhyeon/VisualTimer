@@ -188,6 +188,7 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
 
     override fun saveResult() {
         if (presetName == ""){
+            Toast.makeText(context, "프리셋을 설정해주세요", Toast.LENGTH_SHORT).show()
             return
         }
         StatManager.update(Result(presetName, useOverTime, givenSeconds, milliTimePassed / 1000))

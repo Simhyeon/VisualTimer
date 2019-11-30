@@ -23,9 +23,9 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
     private val animationMultiplier: Double
         get() {
             return if (timeLeft != 0) {
-                0.8 + 0.2 * (timeLeft.toFloat() / givenSeconds.toFloat())
+                0.5 + 0.5 * (timeLeft.toFloat() / givenSeconds.toFloat())
             } else {
-                0.8
+                0.5
             }
         }
     init {
@@ -189,6 +189,7 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
 
     override fun saveResult() {
         if (presetName == ""){
+            Toast.makeText(context, "프리셋을 설정해주세요", Toast.LENGTH_SHORT).show()
             return
         }
         StatManager.update(Result(presetName, useOverTime, givenSeconds, givenSeconds - timeLeft))
