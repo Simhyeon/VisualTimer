@@ -1,9 +1,9 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +17,7 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
 
     private lateinit var myContext: Context
     private lateinit var mainActivity: DynamicActivity
+    private var vibrator: Vibrator? = null
     private var showFab = false
     private var useOverTime = false
     private var blockRun = false
@@ -41,10 +42,6 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         milliTimePassed = 0
         ring.percent = 100f
         ringTimerText.text = CorocUtil.timeToHMSFormat(DynamicActivity.currentPreset.givenTime)
-
-        ring.fgColorEnd = getColor(myContext, R.color.colorYellow)
-        ring.fgColorStart = getColor(myContext, R.color.colorYellow)
-        ringTimerText.setTextColor(getColor(myContext, R.color.colorYellow))
         ring.startAngle = 0f
     }
 
@@ -71,9 +68,11 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         ringRootView.setOnClickListener {
             toggleTimer()
         }
+
+        vibrator = myContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    fun toggleTimer(){
+    private fun toggleTimer(){
         if (!mainActivity.isTimerRunning) {
             mainActivity.overButtonEnabled(false)
             mainActivity.hideMainFab(animation = false)
@@ -112,11 +111,12 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
             milliTimePassed = givenSeconds * 1000
             showFab = true
             mainActivity.showScreenFab(animation = true)
-            if (presetName.isNotEmpty()) {mainActivity.overButtonEnabled(true)}
+            if (DynamicActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
+            if (presetName.isNotEmpty()) mainActivity.overButtonEnabled(true)
         }
     }
 
-    fun overTimer() {
+    private fun overTimer() {
         if (showFab) {
             return
         }
@@ -138,22 +138,15 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
 
         CorocUtil.timerToast(myContext, timerStart = true)
         overJob = CoroutineScope(Dispatchers.Main).launch {
+            ring.percent = 33f
+            var angle = 0f
+            val increment = CorocUtil.getLevelVariation(10, delayMilliSeconds, 360.0)
             while (blockRun) {
-                ring.percent = 33f
-                var angle = 0f
-                val increament = CorocUtil.getLevelVariation(givenSeconds, delayMilliSeconds, 360.0)
-                while (blockRun) {
-                    delay(delayMilliSeconds.toLong())
-                    angle += increament.toFloat()
-                    ring.startAngle = angle
-                    if (angle > 360) {
-                        angle -= 360
-                    }
-//                delay(delayMilliSeconds.toLong())
-//                fillLevel += levelVariation
-//                ring.percent= (fillLevel / 100).toFloat()
-//                if (fillLevel > 10000) {
-//                    fillLevel -= 10000
+                delay(delayMilliSeconds.toLong())
+                angle += increment.toFloat()
+                ring.startAngle = angle
+                if (angle > 360) {
+                    angle -= 360
                 }
             }
         }
@@ -176,6 +169,11 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
     override fun end() {
         mainActivity.hideScreenFab(false)
         clearVars()
+
+        ring.fgColorEnd = getColor(myContext, R.color.colorYellow)
+        ring.fgColorStart = getColor(myContext, R.color.colorYellow)
+        ringTimerText.setTextColor(getColor(myContext, R.color.colorYellow))
+
         mainActivity.isTimerRunning = false
         mainActivity.showMainFab(false)
     }

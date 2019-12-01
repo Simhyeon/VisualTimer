@@ -37,13 +37,6 @@ class FragmentWave: androidx.fragment.app.Fragment(),  TimerController {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (waveTimerView != null) {
-            waveTimerView!!.clearVars()
-        }
-    }
-
     override fun endTimer() {
         waveTimerView?.end()
     }

@@ -77,7 +77,7 @@
             app:fab_size="mini"
             app:fab_colorNormal="#36D5DA"
             app:fab_colorPressed="#43E7A5"
-            app:fab_label="타이머 계속하기" />
+            app:fab_label="초과 타이머 " />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_restart_timer"
@@ -120,7 +120,7 @@
 
     <TextView
         android:id="@+id/presetText"
-        android:text="HELLO"
+        android:text="프리셋없음"
         android:textSize="50dp"
         android:textColor="@color/colorYellow"
         android:layout_gravity="top|center"

@@ -39,16 +39,8 @@ class FragmentRunning: androidx.fragment.app.Fragment(), TimerController {
                 myContext!!,runningRootView, runningImage, timerText, imageArray, 150, DynamicActivity.currentPreset.name.toString(), DynamicActivity.currentPreset.givenTime, R.color.colorYellow, R.color.neonRed
         )
 
-        runningImage.setOnClickListener {
+        runningRootView.setOnClickListener {
             runningTimerView!!.toggleTimer()
-        }
-    }
-
-    override fun onStop() {
-        //StatManager.update(Result(intent.getStringExtra("PresetID"), false, intent.getIntExtra("GivenTime", 50), 20))
-        super.onStop()
-        if (runningTimerView != null) {
-            runningTimerView!!.clearVars()
         }
     }
 

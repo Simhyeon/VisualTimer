@@ -2,20 +2,19 @@ package com.example.myapplication
 
 import android.content.Context
 import android.graphics.PorterDuff
-import androidx.core.content.ContextCompat.getColor
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.coroutines.*
 import kotlin.math.abs
-import kotlin.math.log
 
 class WaveTimerView(val context: Context, val rootView: View, val imageView: ImageView, val delayMilliSeconds: Int, var presetName: String, var givenSeconds: Int) : TimerResult {
 
     var waveDrawable: CorocWaveDrawable? = null
         private set
-
+    var vibrator: Vibrator? = null
     var colorResSrc:Int = 0
 
     private var heightLevel= 0.0
@@ -35,6 +34,8 @@ class WaveTimerView(val context: Context, val rootView: View, val imageView: Ima
             throw IllegalArgumentException("Given seoncds should be positive integer")
         }
         this.levelVariation = CorocUtil.getLevelVariation(givenSeconds, this.delayMilliSeconds)
+
+        vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     fun clearVars() {
@@ -108,7 +109,8 @@ class WaveTimerView(val context: Context, val rootView: View, val imageView: Ima
             milliTimePassed = givenSeconds * 1000
             showFab = true
             context.showScreenFab(animation = true)
-            if (presetName.isNotEmpty()) {context.overButtonEnabled(true)}
+            if (presetName.isNotEmpty()) context.overButtonEnabled(true)
+            if (DynamicActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 

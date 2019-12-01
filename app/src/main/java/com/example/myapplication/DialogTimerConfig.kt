@@ -2,9 +2,7 @@ package com.example.myapplication
 
 import android.app.Dialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.appcompat.widget.AppCompatRadioButton
 import android.text.InputType
 import android.text.TextUtils
 import android.view.WindowManager
@@ -15,6 +13,7 @@ import kotlinx.android.synthetic.main.timer_dialog.*
 
 class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
     var checkedRadio: String = ""
+    var useVib = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (mycontext as DynamicActivity).supportActionBar?.hide()
@@ -32,6 +31,7 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
         timerTypeRadio.setOnCheckedChangeListener { radioGroup, id ->
             checkedRadio = radioGroup.findViewById<RadioButton>(id).text.toString()
         }
+
 
         useDirectTime.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
@@ -51,6 +51,10 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
             }
         }
 
+        useVibrate.setOnCheckedChangeListener {_, isChecked ->
+            useVib = isChecked
+        }
+
         cancelButton.setOnClickListener {
             dismiss()
         }
@@ -68,6 +72,7 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
                 } else {
                     val time = editTimerHour.text.toString().toInt() * 3600 + editTimerMinute.text.toString().toInt() * 60 + editTimerSecond.text.toString().toInt()
                     DynamicActivity.currentPreset = DynamicActivity.Preset("", time)
+                    DynamicActivity.useVibrator = useVib
                     mycontext.refreshTimer()
                 }
             }

@@ -1,16 +1,9 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.graphics.Point
 import androidx.core.graphics.ColorUtils
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import android.widget.Toast
 import kotlin.math.abs
 
@@ -91,18 +84,17 @@ class CorocUtil {
         }
 
         // 시작 색상과 끝 색상 사이에서 비율에 따라서 블렌드된 색상값 (정수)를 반환
-        fun getBlendedColor(startColor: Int, endColor: Int, ratio: Float) : Int {
-            if (ratio > 1 || ratio < 0) {
-                throw IllegalArgumentException("Ratio should be between 0 and 1")
-            }
-            val revRatio = 1 - ratio
+        fun getBlendedColor(startColor: Int, endColor: Int, ratio: Float, reverseRatio: Boolean = false) : Int {
 
-            if (revRatio == 0f) {
+            var newRatio = ratio
+            if(reverseRatio) newRatio = 1 - ratio
+
+            if (newRatio == 0f) {
                 return startColor
-            } else if (revRatio == 1f) { // Should not be reachable
+            } else if (newRatio == 1f) { // Should not be reachable
                 return endColor
             }
-            return ColorUtils.blendARGB(startColor, endColor, revRatio)
+            return ColorUtils.blendARGB(startColor, endColor, newRatio)
         }
 
         fun booleanToHangul(boolean: Boolean, statSpecific: Boolean = false): String{

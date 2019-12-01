@@ -1,7 +1,8 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.content.ContextCompat.getColor
 import android.view.View
 import android.widget.ImageView
@@ -13,6 +14,7 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
 
     private var runningJob: Job? = null
     private var timerJob: Job? = null
+    var vibrator: Vibrator? = null
     var blockRun = false
     var showFab = false
     var duration = givenSeconds
@@ -40,6 +42,8 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
                 throw IllegalArgumentException("imageArray's length should be positive")
             }
         }
+
+        vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     fun clearVars() {
@@ -106,7 +110,8 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
                 blendedColor = CorocUtil.getBlendedColor(
                     getColor(context, startColorRes),
                     getColor(context, endColorRes),
-                    timeLeft.toFloat() / duration
+              timeLeft.toFloat() / duration,
+                    reverseRatio = true
                 )
 
                 runningView.setColorFilter(blendedColor)
@@ -114,9 +119,10 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
             }
             CorocUtil.timerToast(context, timerStart = false)
             showFab = true
-            context.showScreenFab(animation = true)
-            if (presetName.isNotEmpty()) {context.overButtonEnabled(true)}
             runningJob?.cancel()
+            context.showScreenFab(animation = true)
+            if (presetName.isNotEmpty()) context.overButtonEnabled(true)
+            if (DynamicActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 
@@ -147,7 +153,7 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
                 if (counter > imageArray.size - 1) {
                     counter = 0
                 }
-                delay((animationDelay * 0.5f).toLong())
+                delay((animationDelay * 0.7f).toLong())
             }
         }
         timerJob = CoroutineScope(Dispatchers.Main).launch {
@@ -164,13 +170,6 @@ class RunningTimerView(val context: Context, val rootView: View, val runningView
         clearVars()
         context.isTimerRunning = false
         context.showMainFab(false)
-        val blendedColor = CorocUtil.getBlendedColor(
-                getColor(context, startColorRes),
-                getColor(context, endColorRes),
-                timeLeft.toFloat() / duration
-        )
-        runningView.setColorFilter(blendedColor)
-        timerView.setTextColor(blendedColor)
     }
 
     override fun restart() {

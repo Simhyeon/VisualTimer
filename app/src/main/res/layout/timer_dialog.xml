@@ -88,8 +88,10 @@
             android:layout_height="wrap_content"
             android:maxLength="2"
             android:hint="00"
+            android:selectAllOnFocus="true"
             android:inputType="numberSigned"
             android:textCursorDrawable="@null"
+            android:nextFocusDown="@id/editTimerMinute"
             app:backgroundTint="@android:color/holo_blue_dark"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -100,9 +102,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLength="2"
-            android:hint="00"
+            android:hint="10"
+            android:selectAllOnFocus="true"
             android:inputType="numberSigned"
             android:textCursorDrawable="@null"
+            android:nextFocusDown="@id/editTimerSecond"
             app:backgroundTint="@android:color/holo_blue_dark"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -114,11 +118,22 @@
             android:layout_height="wrap_content"
             android:maxLength="2"
             android:hint="00"
+            android:selectAllOnFocus="true"
             android:inputType="numberSigned"
             android:textCursorDrawable="@null"
+            android:imeOptions="actionDone"
+            android:lines="1"
             app:backgroundTint="@android:color/holo_blue_dark"/>
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:layout_gravity="center"
+        android:id="@+id/useVibrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="타이머 종료시 진동하기"
+        app:buttonTint="@android:color/holo_blue_dark"/>
 
     <View
         android:layout_width="match_parent"

@@ -1,10 +1,11 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_statistics.*
 
@@ -13,6 +14,7 @@ class ActivityStatistics: AppCompatActivity() {
 
     lateinit var mAdapter: DataAdapter
     lateinit var swipeController: SwipeController
+    var presetChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,14 @@ class ActivityStatistics: AppCompatActivity() {
         fab_add_preset.setOnClickListener {
             showAddPresetDialog()
         }
+        presetChanged = false
+    }
+
+    override fun onBackPressed() {
+        val intent2 = Intent()
+        intent2.putExtra("presetChanged", presetChanged)
+        setResult(RESULT_OK, intent2)
+        finish()
     }
 
     fun updatePreset(item: Stat) {
@@ -49,17 +59,19 @@ class ActivityStatistics: AppCompatActivity() {
 
                 Snackbar.make(statRootView, "${mAdapter.statList[position].name}를 사용합니다.", Snackbar.LENGTH_SHORT).show()
                 DynamicActivity.currentPreset = DynamicActivity.Preset(mAdapter.statList[position].name, mAdapter.statList[position].givenTime)
+                presetChanged = true
             }
 
             override fun onRightClicked(position: Int) {
                 if(DynamicActivity.currentPreset.name == mAdapter.statList[position].name) {
                     Snackbar.make(statRootView, "프리셋이 초기화됩니다.", Snackbar.LENGTH_SHORT).show()
-                    DynamicActivity.currentPreset = DynamicActivity.Preset("", 60)
+                    DynamicActivity.currentPreset = DynamicActivity.Preset("", 600)
                 }
                 StatManager.delete(mAdapter.statList[position].name)
                 mAdapter.statList.removeAt(position)
                 mAdapter.notifyItemRemoved(position)
                 mAdapter.notifyItemRangeChanged(position, mAdapter.itemCount)
+                presetChanged = true
             }
         })
         val itemTouchhelper = ItemTouchHelper(swipeController)

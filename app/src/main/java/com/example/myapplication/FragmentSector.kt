@@ -2,7 +2,8 @@ package com.example.myapplication
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
 
     private lateinit var myContext: Context
     private lateinit var mainActivity: DynamicActivity
+    private var vibrator: Vibrator? = null
     private var showFab = false
     private var useOverTime = false
     private var blockRun = false
@@ -40,11 +42,6 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
         milliTimePassed = 0
         sector.percent = 0f
         sectorTimerText.text = CorocUtil.timeToHMSFormat(DynamicActivity.currentPreset.givenTime)
-        sectorTimerText.setTextColor(getColor(myContext, R.color.colorYellow))
-
-        sector.fgColor = getColor(myContext, R.color.colorYellow)
-        background.fgColorStart = getColor(myContext, R.color.colorYellow)
-        background.fgColorEnd = getColor(myContext, R.color.colorYellow)
         sector.startAngle = 0f
     }
 
@@ -71,6 +68,8 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
         sectorRootView.setOnClickListener {
             toggleTimer()
         }
+
+        vibrator = myContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     fun toggleTimer(){
@@ -111,7 +110,8 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
             milliTimePassed = givenSeconds * 1000
             showFab = true
             mainActivity.showScreenFab(animation = true)
-            if (presetName.isNotEmpty()) {mainActivity.overButtonEnabled(true)}
+            if (DynamicActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
+            if (presetName.isNotEmpty()) mainActivity.overButtonEnabled(true)
         }
     }
 
@@ -140,7 +140,7 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
         overJob = CoroutineScope(Dispatchers.Main).launch {
             sector.percent = 50f
             var angle = 0f
-            val increament = CorocUtil.getLevelVariation(givenSeconds, delayMilliSeconds, 360.0)
+            val increament = CorocUtil.getLevelVariation(10, delayMilliSeconds, 360.0)
             while (blockRun) {
                 delay(delayMilliSeconds.toLong())
                 angle += increament.toFloat()
@@ -190,6 +190,12 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
     override fun end() {
         mainActivity.hideScreenFab(false)
         clearVars()
+
+        sector.fgColor = getColor(myContext, R.color.colorYellow)
+        background.fgColorStart = getColor(myContext, R.color.colorYellow)
+        background.fgColorEnd = getColor(myContext, R.color.colorYellow)
+        sectorTimerText.setTextColor(getColor(myContext, R.color.colorYellow))
+
         mainActivity.isTimerRunning = false
         mainActivity.showMainFab(false)
     }
@@ -224,6 +230,6 @@ class FragmentSector: Fragment(), TimerController, TimerResult {
         presetName = DynamicActivity.currentPreset.name.toString()
         givenSeconds = DynamicActivity.currentPreset.givenTime
         levelVariation = CorocUtil.getLevelVariation(givenSeconds, delayMilliSeconds)
-        clearVars()
+        //clearVars()
     }
 }
