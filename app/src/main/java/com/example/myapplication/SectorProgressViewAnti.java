@@ -11,7 +11,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-
+// 팀프로젝트에서 작성한 코드가 아니며 배경 필터를 변경하기 위해서 일부 수정만 한 코드입니다.
+// Antialias만 추가하였습니다.
 public class SectorProgressViewAnti extends View {
     private int bgColor;
     private int fgColor;

@@ -8,10 +8,7 @@ import android.view.View
 import kotlin.math.max
 import kotlin.math.min
 
-internal enum class ButtonsState {
-    GONE, LEFT_VISIBLE, RIGHT_VISIBLE
-}
-
+// 팀프로젝트에서 작성한 코드가 아니며 리사이클러뷰 스와이프를 변경하기 위해서 일부 수정만 한 코드입니다.
 class SwipeController(private val buttonsActions: SwipeControllerActions?) : Callback() {
     private var swipeBack = false
     private var buttonShowedState = ButtonsState.GONE
@@ -149,4 +146,8 @@ class SwipeController(private val buttonsActions: SwipeControllerActions?) : Cal
 abstract class SwipeControllerActions {
     abstract fun onLeftClicked(position: Int)
     abstract fun onRightClicked(position: Int)
+}
+
+internal enum class ButtonsState {
+    GONE, LEFT_VISIBLE, RIGHT_VISIBLE
 }

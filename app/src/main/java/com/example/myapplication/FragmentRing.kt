@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,14 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_new_ring_revised.*
 import kotlinx.coroutines.*
 
+/**
+ * 고리 형태 타이머 클래스
+ * 고리 형태의 타이머 이미지를 직접 관리합니다.
+ */
 class FragmentRing: Fragment(), TimerController, TimerResult {
 
     private lateinit var myContext: Context
-    private lateinit var mainActivity: DynamicActivity
+    private lateinit var mainActivity: MainActivity
     private var vibrator: Vibrator? = null
     private var showFab = false
     private var useOverTime = false
@@ -32,7 +37,11 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
     private var presetName = ""
     private var givenSeconds = 120
 
+    /**
+     * 변수를 초기화하고 코루틴 작업을 종료하는 함수
+     */
     private fun clearVars() {
+        Log.d("LOGLOG", "CLEARED")
         showFab = false
         useOverTime = false
         blockRun = false
@@ -41,14 +50,15 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         fillLevel = 0.0
         milliTimePassed = 0
         ring.percent = 100f
-        ringTimerText.text = CorocUtil.timeToHMSFormat(DynamicActivity.currentPreset.givenTime)
+        ringTimerText.text = CorocUtil.timeToHMSFormat(MainActivity.currentPreset.givenTime)
         ring.startAngle = 0f
     }
 
+    // Fragment View에 부착되었을 때 불리는 함수, 컨텍스트를 저장함
     override fun onAttach(context: Context) {
         super.onAttach(context)
         myContext = context
-        mainActivity = context as DynamicActivity
+        mainActivity = context as MainActivity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,14 +67,16 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
                 container, false)
     }
 
+    // 시간을 표시하는 텍스트를 초기화하고, onclicklistener를 설정함
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        ringTimerText.text = CorocUtil.timeToHMSFormat(DynamicActivity.currentPreset.givenTime)
-        presetName = DynamicActivity.currentPreset.name.toString()
-        givenSeconds = DynamicActivity.currentPreset.givenTime
+        ringTimerText.text = CorocUtil.timeToHMSFormat(MainActivity.currentPreset.givenTime)
+        presetName = MainActivity.currentPreset.name.toString()
+        givenSeconds = MainActivity.currentPreset.givenTime
         levelVariation = CorocUtil.getLevelVariation(givenSeconds, delayMilliSeconds)
 
+        // 화면을 터치하면 타이머를 토글합니다.
         ringRootView.setOnClickListener {
             toggleTimer()
         }
@@ -72,6 +84,17 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         vibrator = myContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
+    /**
+     * 타이머를 토글합니다. (시작, 종료)
+     * 최초 터치할 경우에는 main floating aciton menu를 숨기고 코루틴을 시작합니다.
+     * 다시 터치할 경우에는 screen floating action menu를 보이고 코루틴을 종료합니다.
+     *
+     * 코루틴은 딜레이마다 타이머 이미지와 남은 시간 텍스트를 업데이트합니다.
+     * 남은 시간이 0이 될 경우에는 코루틴을 종료하고 Screen faloting action menu 보여줍니다.
+     * 진동을 선택했을 경우에는 1.5초간 진동합니다.
+     *
+     * 만약 초과 타이머가 선택되었을 경우에는 OverTimer로 분기합니다.
+     */
     private fun toggleTimer(){
         if (!mainActivity.isTimerRunning) {
             mainActivity.overButtonEnabled(false)
@@ -99,6 +122,7 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         }
 
         CorocUtil.timerToast(myContext, timerStart = true)
+        // 고리의 퍼센트를 변경하는 코루틴
         jobId = CoroutineScope(Dispatchers.Main).launch {
             while ((milliTimePassed < givenSeconds * 1000)) {
                 delay(delayMilliSeconds.toLong())
@@ -111,11 +135,17 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
             milliTimePassed = givenSeconds * 1000
             showFab = true
             mainActivity.showScreenFab(animation = true)
-            if (DynamicActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
+            if (MainActivity.useVibrator) vibrator?.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
             if (presetName.isNotEmpty()) mainActivity.overButtonEnabled(true)
         }
     }
 
+    /**
+     * 초과 타이머를 토글합니다. (시작, 종료)
+     * Screen floating action button을 클릭했을 때 호출되며
+     * 처음 토글시에는 새로운 코루틴을 시작하여 초과한 시간을 표시하고 타이머 이미지를 업데이트합니다.
+     * 다시 토글시에는 코루틴을 종료하고 Screen floating action menu를 호출합니다.
+     */
     private fun overTimer() {
         if (showFab) {
             return
@@ -158,14 +188,19 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
             }
         }
     }
-    // TimerController
+    // TimerController 인터페이스 함수입니다.
+    // 인터페이스 주석을 참조
     override fun endTimer() { end() }
     override fun restartTimer() { restart() }
     override fun saveTimer() { saveResult() }
     override fun startOverTimer() { overTime() }
-    override fun refreshTimer() { refresh() }
+    override fun refreshTimer(init: Boolean) { refresh(init) }
 
-    // TimerResult
+    // TimerResult 인터페이스 함수
+    /**
+     * 타이머를 종료합니다.
+     * 타이머 색상을 원래대로 초기화하고 main FLoating action menu를 보입니다.
+     */
     override fun end() {
         mainActivity.hideScreenFab(false)
         clearVars()
@@ -178,12 +213,26 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         mainActivity.showMainFab(false)
     }
 
+    /**
+     * 타이머를 재시작합니다.
+     * 지역 변수와 코루틴을 초기화하고 타이머를 토글합니다.
+     */
     override fun restart() {
         mainActivity.hideScreenFab(false)
         clearVars()
+
+        ring.fgColorEnd = getColor(myContext, R.color.colorYellow)
+        ring.fgColorStart = getColor(myContext, R.color.colorYellow)
+        ringTimerText.setTextColor(getColor(myContext, R.color.colorYellow))
+
         toggleTimer()
     }
 
+    /**
+     * 타이머 결과를 저장합니다.
+     * Result 객체를 생성하고 StatManager를 통해서 DB에 저장합니다.
+     * 선택된 타이머가 없다면 저장하지 않습니다.
+     */
     override fun saveResult() {
         if (presetName == ""){
             Toast.makeText(context, "프리셋을 설정해주세요", Toast.LENGTH_SHORT).show()
@@ -193,6 +242,11 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         end()
     }
 
+    /**
+     * 초과 타이머를 시작합니다.
+     * 일부 변수를 초기화하고
+     * 타이머를 토글합니다.
+     */
     override fun overTime() {
         mainActivity.hideScreenFab(false)
         showFab = false
@@ -202,10 +256,13 @@ class FragmentRing: Fragment(), TimerController, TimerResult {
         toggleTimer()
     }
 
-    override fun refresh() {
-        presetName = DynamicActivity.currentPreset.name.toString()
-        givenSeconds = DynamicActivity.currentPreset.givenTime
+    /**
+     * 타이머를 업데이트 합니다. 프리셋이 변경될 경우, 지역 변수인 프리셋 이름과 총시간을 변경합니다.
+     */
+    override fun refresh(init: Boolean) {
+        presetName = MainActivity.currentPreset.name.toString()
+        givenSeconds = MainActivity.currentPreset.givenTime
         levelVariation = CorocUtil.getLevelVariation(givenSeconds, delayMilliSeconds)
-        clearVars()
+        if (!init) ringTimerText.text = CorocUtil.timeToHMSFormat(MainActivity.currentPreset.givenTime)
     }
 }

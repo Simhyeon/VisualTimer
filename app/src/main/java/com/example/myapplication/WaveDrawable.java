@@ -28,6 +28,7 @@ import static android.content.ContentValues.TAG;
  * Created by jing on 16-12-6.
  */
 
+// 팀프로젝트에서 작성한 코드가 아니며 배경 필터를 변경하기 위해서 일부 수정만 한 코드입니다.
 public class WaveDrawable extends Drawable implements Animatable, ValueAnimator.AnimatorUpdateListener {
 
     private static final float WAVE_HEIGHT_FACTOR = 0.025f; //original is 0.2f

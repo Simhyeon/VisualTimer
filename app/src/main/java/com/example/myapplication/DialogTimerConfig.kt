@@ -10,13 +10,20 @@ import android.widget.RadioButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.timer_dialog.*
 
-
+/**
+ * 타이머 설정을 입력하는 다이얼로그입니다.
+ * @param[mycontext] 다이얼로그가 표시될 컨텍스트이며 메인 액티비티여야 합니다.
+ */
 class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
     var checkedRadio: String = ""
     var useVib = false
+
+    /**
+     * 타이머 설정 다이얼로그의 onclickListner를 설정합니다.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (mycontext as DynamicActivity).supportActionBar?.hide()
+        (mycontext as MainActivity).supportActionBar?.hide()
         mycontext.window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.timer_dialog)
 
@@ -32,7 +39,9 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
             checkedRadio = radioGroup.findViewById<RadioButton>(id).text.toString()
         }
 
-
+        /**
+         * 체크박스 설정 여부에 따라 시간 설정 텍스트의 활성화 여부를 결정합니다.
+         */
         useDirectTime.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 editTimerHour.isEnabled= true
@@ -51,13 +60,24 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
             }
         }
 
+        /**
+         * 타이머 진동 여부를 설정합니다.
+         */
         useVibrate.setOnCheckedChangeListener {_, isChecked ->
             useVib = isChecked
         }
 
+        /**
+         * 다이얼로그를 취소합니다.
+         */
         cancelButton.setOnClickListener {
             dismiss()
         }
+
+        /**
+         * 입력받은 타이머 정보에 따라 타이머를 업데이트합니다.
+         * 서식이 맞춰지지 않았다면 거부됩니다.
+         */
         okButton.setOnClickListener {
 
             //Change Timer
@@ -71,9 +91,9 @@ class DialogTimerConfig(private val mycontext: Context): Dialog(mycontext) {
                     return@setOnClickListener
                 } else {
                     val time = editTimerHour.text.toString().toInt() * 3600 + editTimerMinute.text.toString().toInt() * 60 + editTimerSecond.text.toString().toInt()
-                    DynamicActivity.currentPreset = DynamicActivity.Preset("", time)
-                    DynamicActivity.useVibrator = useVib
-                    mycontext.refreshTimer()
+                    MainActivity.currentPreset = MainActivity.Preset("", time)
+                    MainActivity.useVibrator = useVib
+                    mycontext.refreshTimer(init = false)
                 }
             }
             dismiss()

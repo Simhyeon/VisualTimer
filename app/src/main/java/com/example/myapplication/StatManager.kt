@@ -13,6 +13,9 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import kotlin.Array
 
+/**
+ * DB를 관리하고 DB 정보에 접근하도록 하는 매개 클래스입니다.
+ */
 class StatManager {
     companion object {
         private lateinit var myContext: Context
@@ -23,16 +26,28 @@ class StatManager {
         private const val fileName: String = "stats.json"
         private val dateDecoder = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")!!
 
+        /**
+         * 데이터베이스 시작합니다.
+         */
         fun init(context: Context) {
             myContext = context
             statDB = StatDB(context)
         }
 
+        /**
+         * 프리셋을 데이터베이스 더합니다.
+         */
         fun addPreset(name: String, givenTime: Int): Boolean {
             val dateTime: DateTime = DateTime.now()
             return statDB.insertData(name, givenTime, 0,0,0,0,gson.toJson(listOf<String>()), dateDecoder.print(dateTime))
         }
 
+        /**
+         * 프리셋 이름에 해당하는 프리셋 시간을 반환합니다.
+         *
+         * @param[name] 프리셋 이름
+         * @return 프리셋 시간
+         */
         fun getGivenTime(name: String): Int? {
             val cur = statDB.getByName(name)
             if (cur.count == 0 ) {
@@ -44,6 +59,9 @@ class StatManager {
             }
         }
 
+        /**
+         * 프리셋 이름 리스트를 반환합니다.
+         */
         fun getNames(): List<String> {
             val list = mutableListOf<String>()
             try {
@@ -60,6 +78,11 @@ class StatManager {
             }
         }
 
+        /**
+         * 프리셋 정보/통계를 업데이트 합니다.
+         *
+         * @param[result] 업데이트할 타이머 결과값입니다.
+         */
         fun update(result: Result) {
             val success: Boolean
             val cur = statDB.getByName(result.name)
@@ -82,15 +105,26 @@ class StatManager {
             }
         }
 
+        /**
+         * 프리셋 정보를 삭제합니다.
+         *
+         * @param[presetName] 삭제할 프리셋 이름
+         */
         fun delete(presetName: String) {
             if (!statDB.deleteData(presetName)) {
                 Toast.makeText(myContext, "삭제 실패", Toast.LENGTH_SHORT).show()
             }
         }
 
+        /**
+         * DB의 모든 데이터를 가져옵니다.
+         */
         fun getStatistics() =
             statDB.getAllData()
 
+        /**
+         * DB의 모든 데이터를 Stat 클래스 리스트의 형태로 반환합니다.
+         */
         fun getStatList(): MutableList<Stat> {
             val list: MutableList<Stat> = mutableListOf()
             val cursor = statDB.getAllData()
@@ -128,15 +162,26 @@ class StatManager {
                 const val COL_9: String = "LASTMODIFIED"
                 // class Stat(val id: String, var givenTime: Int, var normalCount: Int ,var normalTimeSum: Int, var overCount: Int, var overTimeSum: Int, var history : MutableList<Result>)
             }
+
+            /**
+             * DB 테이블을 만드는 쿼리를 실행합니다.
+             */
             override fun onCreate(db: SQLiteDatabase?) {
                 db?.execSQL("create table $TABLENAME ($COL_1 INTEGER PRIMARY KEY AUTOINCREMENT, $COL_2 TEXT UNIQUE, $COL_3 INTEGER, $COL_4 INTEGER,$COL_5 INTEGER,$COL_6 INTEGER,$COL_7 INTEGER, $COL_8 TEXT, $COL_9 TEXT)")
             }
+
+            /**
+             * 버전이 바뀔 경우 DB를 업그레이드 합니다.
+             */
             override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
                 Log.d("LOG", "UPGRADED")
                 db?.execSQL("DROP TABLE IF EXISTS $TABLENAME")
                 onCreate(db)
             }
 
+            /**
+             * DB에 데이터를 추가하는 쿼리문을 실행합니다.
+             */
             fun insertData(name: String, givenTime: Int, normalCount: Int, normalTimeSum: Int, overCount: Int, overTimeSum: Int, history: String, lastModified: String) : Boolean {
                 val db :SQLiteDatabase = this.writableDatabase
                 val contentValues = ContentValues()
@@ -152,6 +197,9 @@ class StatManager {
                 return result.toInt() != -1
             }
 
+            /**
+             * DB에 담긴 데이터를 업데이트하는 쿼리문을 실행합니다.
+             */
             fun updateData(name: String, normalCount: Int, normalTimeSum: Int, overCount: Int, overTimeSum: Int, history: String, lastModified: String): Boolean {
                 val db :SQLiteDatabase = this.writableDatabase
                 try {
@@ -164,6 +212,9 @@ class StatManager {
                 return true
             }
 
+            /**
+             * DB에 담긴 데이터를 삭제하는 쿼리문을 실행합니다.
+             */
             fun deleteData(name: String) : Boolean {
                 val db :SQLiteDatabase = this.writableDatabase
                 try {
@@ -175,12 +226,16 @@ class StatManager {
                 }
                 return true
             }
-            // moveToFirst to use cursor properly
+            /**
+             * DB에 데이터를 이름으로 검색하여 Cursor로 반환하는 쿼리문을 실행합니다.
+             */
             fun getByName(name: String): Cursor {
                 val db : SQLiteDatabase = this.readableDatabase
                 return db.rawQuery("SELECT * FROM $TABLENAME WHERE NAME LIKE '%$name%'", null)
             }
-
+            /**
+             * DB에 모든 데이터를 최신순으로 정렬하여 Cursor로 반환하는 쿼리문을 실행합니다.
+             */
             fun getAllData(): Cursor {
                 val db :SQLiteDatabase = this.readableDatabase
                 return db.rawQuery("select * from $TABLENAME ORDER BY $COL_9 DESC", null)
@@ -189,14 +244,17 @@ class StatManager {
     }
 }
 
-// Checked 11-23
+/**
+ * 프리셋 기록을 DB에서 읽어와 메모리에 저장하는 클래스입니다.
+ */
 class Stat(val name: String, var givenTime: Int, var normalCount: Int, var normalTimeSum: Int, var overCount: Int, var overTimeSum: Int, var history : MutableList<Result>) {
-    // Checked
+
+    // 타이머 실행 총회수
     var totalCount : Int = 0
         get() = normalCount + overCount
         private set
 
-    // Checked
+    // 타이머 평균 회수
     var normalAverage: Float = 0f
         get() {
             if (normalCount <=0) {
@@ -205,6 +263,7 @@ class Stat(val name: String, var givenTime: Int, var normalCount: Int, var norma
             return normalTimeSum.toFloat() / normalCount
         }
         private  set
+    // 초과 타이머 평균 회수
     var overAverage: Float = 0f
         get() {
             if (overCount <=0) {
@@ -214,23 +273,12 @@ class Stat(val name: String, var givenTime: Int, var normalCount: Int, var norma
         }
         private  set
 
-    // Checked
-    fun update(data: Result) {
-        // 결과값을 통해서 업데이트 한다.
-        history.add(0, data)
-        when(data.isOverTime) {
-            true -> {
-                overTimeSum += data.spentTime - data.givenTime
-                overCount +=1
-            }
-            false -> {
-                normalTimeSum += data.spentTime
-                normalCount +=1
-            }
-        }
-    }
-
-    // Checked
+    /**
+     * 타이머 기록을 주어진 길이만큼 반환합니다.
+     * 타이머 기록은 최신순으로 반환됩니다.
+     *
+     * @param[count] 원하는 기록의 숫자입니다.
+     */
     fun getHistory(count: Int): List<Result> {
         return when {
             history.size == 0 -> history
@@ -239,19 +287,12 @@ class Stat(val name: String, var givenTime: Int, var normalCount: Int, var norma
             else -> history
         }
     }
-
-    // Checked
-    fun clear() {
-        normalCount = 0
-        normalTimeSum = 0
-        overCount = 0
-        overTimeSum = 0
-        history.clear()
-    }
 }
 
 
-/// 타이머가 끝나고 statManager에 리턴할 결과값
+/**
+ * 타이머 종료시에 DB에 업데이트될 결과값 데이터 클래스입니다.
+ */
 data class Result(val name: String, val isOverTime: Boolean, var givenTime: Int, var spentTime: Int) {
     init {
         if (givenTime <= 0 ) {
